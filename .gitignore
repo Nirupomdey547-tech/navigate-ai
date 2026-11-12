@@ -1,0 +1,55 @@
+# ── Node / npm ────────────────────────────────────────────
+node_modules/
+.next/
+.turbo/
+*.tsbuildinfo
+dist/
+out/
+
+# ── Python ────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.eggs/
+.venv/
+venv/
+.env
+.envrc
+*.pyo
+
+# ── Environment ───────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Datasets & Models (large files) ──────────────────────
+datasets/rxr/*.jsonl
+datasets/rxr/*.gz
+datasets/rxr/*.hdf5
+model_checkpoints/*.pt
+model_checkpoints/*.pth
+model_checkpoints/*.bin
+model_checkpoints/*.safetensors
+model_checkpoints/hf_cache/
+
+# ── IDE ───────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Logs ─────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Coverage ─────────────────────────────────────────────
+.coverage
+htmlcov/
+.pytest_cache/
+coverage.xml
+
+# ── Docker ───────────────────────────────────────────────
+*.override.yml
