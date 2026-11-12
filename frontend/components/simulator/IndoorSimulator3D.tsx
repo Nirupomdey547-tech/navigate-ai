@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useMemo } from "react";
+import React, { useRef, useEffect, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Line, Sphere, Text, Billboard } from "@react-three/drei";
+import { OrbitControls, Line, Text, Billboard } from "@react-three/drei";
 import * as THREE from "three";
 
 interface NodeData {
@@ -31,7 +31,7 @@ interface IndoorSimulator3DProps {
 }
 
 // ---------------------------------------------------------------------------
-// Room Volume & Platform
+// Room Volume & Architectural Platform
 // ---------------------------------------------------------------------------
 function RoomPlatform({
   node,
@@ -46,46 +46,38 @@ function RoomPlatform({
 }) {
   const [x, y, z] = node.position;
 
-  const color = useMemo(() => {
-    if (isCurrent) return "#63E6D1";
-    if (isGoal) return "#FF7777";
-    if (isWaypoint) return "#F5C66B";
-    return "#1F2937";
-  }, [isCurrent, isGoal, isWaypoint]);
-
   return (
     <group position={[x, y, z]}>
       {/* Floor Pad */}
       <mesh position={[0, -0.05, 0]}>
         <boxGeometry args={[2.2, 0.1, 2.2]} />
         <meshStandardMaterial
-          color={isCurrent ? "#163832" : "#10161B"}
-          roughness={0.4}
-          metalness={0.7}
+          color={isCurrent ? "#27272A" : "#09090B"}
+          roughness={0.2}
+          metalness={0.8}
         />
       </mesh>
 
-      {/* Perimeter Glow Edge */}
+      {/* Perimeter Specular Ring */}
       <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[1.0, 1.1, 32]} />
+        <ringGeometry args={[1.05, 1.15, 32]} />
         <meshBasicMaterial
-          color={color}
+          color={isCurrent ? "#FFFFFF" : isGoal ? "#E4E4E7" : "#3F3F46"}
           transparent
-          opacity={isCurrent ? 0.9 : 0.3}
+          opacity={isCurrent ? 0.95 : isGoal ? 0.8 : 0.25}
           side={THREE.DoubleSide}
         />
       </mesh>
 
-
       {/* Floating Room Label */}
-      <Billboard position={[0, 1.4, 0]}>
+      <Billboard position={[0, 1.35, 0]}>
         <Text
-          fontSize={0.24}
-          color={isCurrent ? "#63E6D1" : "#F4F7F8"}
+          fontSize={0.22}
+          color={isCurrent ? "#FFFFFF" : "#A1A1AA"}
           anchorX="center"
           anchorY="middle"
           outlineWidth={0.02}
-          outlineColor="#0A0D10"
+          outlineColor="#000000"
         >
           {node.room_type}
         </Text>
@@ -93,10 +85,10 @@ function RoomPlatform({
 
       {/* Landmark Markers */}
       {node.landmarks.slice(0, 2).map((lm, idx) => (
-        <Billboard key={lm} position={[0, 1.1 - idx * 0.18, 0]}>
+        <Billboard key={lm} position={[0, 1.05 - idx * 0.18, 0]}>
           <Text
-            fontSize={0.14}
-            color="#929DA5"
+            fontSize={0.13}
+            color="#71717A"
             anchorX="center"
             anchorY="middle"
           >
@@ -105,16 +97,16 @@ function RoomPlatform({
         </Billboard>
       ))}
 
-      {/* Goal Pillar if destination */}
+      {/* Goal Specular Beacon Pillar */}
       {isGoal && (
-        <mesh position={[0, 0.8, 0]}>
-          <cylinderGeometry args={[0.08, 0.08, 1.6, 16]} />
+        <mesh position={[0, 0.9, 0]}>
+          <cylinderGeometry args={[0.06, 0.06, 1.8, 16]} />
           <meshStandardMaterial
-            color="#FF7777"
-            emissive="#FF7777"
-            emissiveIntensity={1.5}
+            color="#FFFFFF"
+            emissive="#FFFFFF"
+            emissiveIntensity={2.0}
             transparent
-            opacity={0.8}
+            opacity={0.85}
           />
         </mesh>
       )}
@@ -136,15 +128,13 @@ function AgentMarker({
   const targetPos = useRef(new THREE.Vector3(...currentPos));
 
   useEffect(() => {
-    targetPos.current.set(currentPos[0], currentPos[1] + 0.3, currentPos[2]);
+    targetPos.current.set(currentPos[0], currentPos[1] + 0.32, currentPos[2]);
   }, [currentPos]);
 
   useFrame((_, delta) => {
     if (groupRef.current) {
-      // Smooth lerp to position
       groupRef.current.position.lerp(targetPos.current, delta * 8);
 
-      // Smooth heading rotation
       const rad = (-heading * Math.PI) / 180;
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
@@ -155,39 +145,33 @@ function AgentMarker({
   });
 
   return (
-    <group ref={groupRef} position={[currentPos[0], currentPos[1] + 0.3, currentPos[2]]}>
-      {/* Agent Body / Drone */}
+    <group ref={groupRef} position={[currentPos[0], currentPos[1] + 0.32, currentPos[2]]}>
+      {/* Agent Body in Sleek Architectural Chrome / White */}
       <mesh>
-        <sphereGeometry args={[0.28, 24, 24]} />
+        <sphereGeometry args={[0.26, 24, 24]} />
         <meshStandardMaterial
-          color="#63E6D1"
-          emissive="#63E6D1"
-          emissiveIntensity={1.5}
-          metalness={0.9}
-          roughness={0.1}
-        />
-      </mesh>
-
-      {/* Inner Core */}
-      <mesh>
-        <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color="#ffffff" />
-      </mesh>
-
-      {/* Directional Beacon / Cone pointer */}
-      <mesh position={[0, 0, 0.45]} rotation={[Math.PI / 2, 0, 0]}>
-        <coneGeometry args={[0.12, 0.35, 16]} />
-        <meshStandardMaterial
-          color="#82B9FF"
-          emissive="#82B9FF"
+          color="#FFFFFF"
+          emissive="#FFFFFF"
           emissiveIntensity={1.8}
+          metalness={0.95}
+          roughness={0.05}
         />
       </mesh>
 
-      {/* Orbiting Sensor Ring */}
+      {/* Directional Beacon Pointer */}
+      <mesh position={[0, 0, 0.46]} rotation={[Math.PI / 2, 0, 0]}>
+        <coneGeometry args={[0.11, 0.34, 16]} />
+        <meshStandardMaterial
+          color="#E4E4E7"
+          emissive="#E4E4E7"
+          emissiveIntensity={1.5}
+        />
+      </mesh>
+
+      {/* Orbiting Specular Halo */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
         <ringGeometry args={[0.42, 0.46, 32]} />
-        <meshBasicMaterial color="#63E6D1" transparent opacity={0.6} side={THREE.DoubleSide} />
+        <meshBasicMaterial color="#FFFFFF" transparent opacity={0.5} side={THREE.DoubleSide} />
       </mesh>
     </group>
   );
@@ -207,7 +191,7 @@ function CameraRig({
 
   useEffect(() => {
     if (mode === "top_down") {
-      camera.position.set(0, 28, 0.01);
+      camera.position.set(0, 26, 0.01);
       camera.lookAt(0, 0, 0);
     } else if (mode === "perspective") {
       camera.position.set(0, 18, 22);
@@ -244,20 +228,17 @@ export default function IndoorSimulator3D({
   targetWaypoint,
   cameraMode = "perspective",
 }: IndoorSimulator3DProps) {
-  // Map node positions
   const nodeMap = useMemo(() => {
     const map = new Map<string, NodeData>();
     nodes.forEach((n) => map.set(n.id, n));
     return map;
   }, [nodes]);
 
-  // Current node object
   const currentNode = nodeMap.get(currentNodeId) || nodes[0];
   const currentPos: [number, number, number] = currentNode
     ? currentNode.position
     : [0, 0, 0];
 
-  // Completed path points for line drawing
   const traveledPoints = useMemo(() => {
     const pts: [number, number, number][] = [];
     pathTraveled.forEach((nid) => {
@@ -267,7 +248,6 @@ export default function IndoorSimulator3D({
     return pts;
   }, [pathTraveled, nodeMap]);
 
-  // Reference shortest path points
   const refPoints = useMemo(() => {
     const pts: [number, number, number][] = [];
     referencePath.forEach((nid) => {
@@ -278,18 +258,18 @@ export default function IndoorSimulator3D({
   }, [referencePath, nodeMap]);
 
   return (
-    <div className="w-full h-full relative bg-[#070A0D] overflow-hidden select-none">
+    <div className="w-full h-full relative bg-black overflow-hidden select-none">
       <Canvas
-        camera={{ position: [0, 18, 22], fov: 48 }}
+        camera={{ position: [0, 18, 22], fov: 46 }}
         gl={{ antialias: true, alpha: true }}
       >
-        <color attach="background" args={["#070A0D"]} />
+        <color attach="background" args={["#000000"]} />
         <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 20, 15]} intensity={0.8} />
-        <pointLight position={[0, 8, 0]} intensity={0.6} color="#63E6D1" />
+        <directionalLight position={[10, 20, 15]} intensity={0.9} color="#FFFFFF" />
+        <pointLight position={[0, 8, 0]} intensity={0.8} color="#FFFFFF" />
 
-        {/* Global Grid Helper */}
-        <gridHelper args={[40, 40, "#1F2937", "#111827"]} position={[0, -0.1, 6]} />
+        {/* Global Architectural Grid */}
+        <gridHelper args={[42, 42, "#27272A", "#121216"]} position={[0, -0.1, 6]} />
 
         {/* Render Graph Edges */}
         {edges.map((e, idx) => {
@@ -303,35 +283,35 @@ export default function IndoorSimulator3D({
                 [src.position[0], src.position[1] + 0.05, src.position[2]],
                 [tgt.position[0], tgt.position[1] + 0.05, tgt.position[2]],
               ]}
-              color="#374151"
-              lineWidth={1.2}
+              color="#3F3F46"
+              lineWidth={1.0}
               transparent
-              opacity={0.4}
+              opacity={0.35}
             />
           );
         })}
 
-        {/* Reference Shortest Path (dashed-style blue) */}
+        {/* Reference Shortest Path (Subtle Silver Line) */}
         {refPoints.length >= 2 && (
           <Line
             points={refPoints}
-            color="#82B9FF"
-            lineWidth={2.2}
+            color="#71717A"
+            lineWidth={2.0}
             transparent
-            opacity={0.5}
+            opacity={0.45}
           />
         )}
 
-        {/* Traveled Glowing Path (Teal) */}
+        {/* Traveled Glowing Path (Pure White) */}
         {traveledPoints.length >= 2 && (
           <Line
             points={traveledPoints}
-            color="#63E6D1"
-            lineWidth={3.5}
+            color="#FFFFFF"
+            lineWidth={3.2}
           />
         )}
 
-        {/* Render All Node Rooms */}
+        {/* All Node Rooms */}
         {nodes.map((node) => (
           <RoomPlatform
             key={node.id}
@@ -342,10 +322,10 @@ export default function IndoorSimulator3D({
           />
         ))}
 
-        {/* The Mobile Navigation Agent */}
+        {/* Navigation Agent Beacon */}
         <AgentMarker currentPos={currentPos} heading={currentHeading} />
 
-        {/* Camera Controller & Orbit */}
+        {/* Camera Rig & Orbit Controls */}
         <CameraRig mode={cameraMode} agentPos={currentPos} />
         {cameraMode !== "follow" && (
           <OrbitControls
@@ -358,21 +338,21 @@ export default function IndoorSimulator3D({
         )}
       </Canvas>
 
-      {/* Floating 3D HUD Indicators */}
-      <div className="absolute top-3 left-3 flex items-center gap-2 bg-[#0A0D10]/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-[11px] text-[#929DA5]">
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#63E6D1] shadow-[0_0_8px_#63E6D1]" />
-          <span>Agent</span>
+      {/* Floating HUD Indicator Capsule */}
+      <div className="absolute top-4 left-4 flex items-center gap-3 liquid-glass-elevated px-3.5 py-1.5 rounded-full text-[11px] text-zinc-300">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.9)]" />
+          <span className="font-medium text-white">Agent</span>
         </div>
-        <span className="text-white/20">|</span>
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#FF7777] shadow-[0_0_8px_#FF7777]" />
-          <span>Destination</span>
+        <span className="text-white/15">/</span>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full border border-white/60 bg-white/20" />
+          <span className="text-zinc-300">Destination</span>
         </div>
-        <span className="text-white/20">|</span>
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#82B9FF]" />
-          <span>Shortest Path</span>
+        <span className="text-white/15">/</span>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-zinc-600" />
+          <span className="text-zinc-400">Reference Route</span>
         </div>
       </div>
     </div>

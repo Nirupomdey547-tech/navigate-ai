@@ -4,112 +4,110 @@ import React, { useState } from "react";
 import Link from "next/link";
 import AppShell from "@/components/layout/AppShell";
 import Hero3D from "@/components/landing/Hero3D";
+import LiquidCard from "@/components/ui/LiquidCard";
 import {
   Compass,
   ArrowRight,
   Globe2,
   Cpu,
   Layers,
-  Sparkles,
-  CheckCircle2,
-  ShieldAlert,
-  BarChart3,
-  ExternalLink,
+  ArrowUpRight,
+  ShieldCheck,
+  Activity,
   Code2,
   Terminal,
-  ChevronRight,
-  Activity,
-  Zap,
 } from "lucide-react";
 
 export default function LandingPage() {
-  const [activeTab, setActiveTab] = useState<"en" | "hi">("en");
+  const [activeTab, setActiveTab] = useState<"en" | "hi" | "es">("en");
 
   return (
     <AppShell>
-      <div className="relative overflow-hidden">
-        {/* Ambient background glow orbs */}
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#63E6D1]/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute top-[800px] right-10 w-[500px] h-[500px] bg-[#82B9FF]/10 rounded-full blur-[160px] pointer-events-none" />
-
+      <div className="relative overflow-hidden bg-black text-white selection:bg-white/20">
+        
         {/* HERO SECTION */}
-        <section className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Hero Content */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-xs text-[#929DA5]">
-                <span className="w-2 h-2 rounded-full bg-[#63E6D1] animate-pulse" />
-                <span className="font-semibold text-white/90">Google Research RxR Challenge</span>
-                <span className="text-white/20">|</span>
-                <span className="text-[#63E6D1]">Multilingual VLN Agent</span>
+        <section className="relative pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            
+            {/* Left Column: Editorial Headline & Actions */}
+            <div className="lg:col-span-7 space-y-8 text-center lg:text-left">
+              
+              {/* Monochromatic Pill Tag */}
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full liquid-glass-subtle text-xs text-zinc-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] animate-pulse" />
+                <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                  Google Research RxR Benchmark
+                </span>
+                <span className="text-white/20">/</span>
+                <span className="text-white font-medium">Multilingual VLN Agent</span>
               </div>
 
-              {/* Headline */}
-              <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
-                Navigate beyond{" "}
-                <span className="bg-gradient-to-r from-[#63E6D1] via-[#82B9FF] to-white bg-clip-text text-transparent">
-                  language.
-                </span>
-              </h1>
+              {/* Oversized Editorial Heading */}
+              <div className="space-y-3">
+                <h1 className="text-5xl sm:text-7xl font-display font-extrabold tracking-[-0.04em] text-white leading-[1.02]">
+                  Navigate beyond <br />
+                  <span className="text-gradient-silver">language.</span>
+                </h1>
+                <p className="text-base sm:text-lg text-zinc-400 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light pt-2">
+                  <span className="text-white font-medium">Language is the destination. Intelligence is the path.</span> An autonomous multilingual Vision-and-Language Navigation agent transforming natural instructions into real-time 3D spatial decisions.
+                </p>
+              </div>
 
-              {/* Tagline & Description */}
-              <p className="text-base sm:text-lg text-[#929DA5] max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
-                <strong className="text-white font-medium">Language is the destination. Intelligence is the path.</strong> An autonomous multilingual Vision-and-Language Navigation agent transforming raw natural-language instructions into real-time 3D spatial decisions.
-              </p>
-
-              {/* Action Buttons */}
+              {/* Primary Call to Action Controls */}
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
                 <Link
                   href="/navigation"
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-xs bg-gradient-to-r from-[#63E6D1] to-[#82B9FF] text-[#0A0D10] shadow-xl shadow-[#63E6D1]/20 hover:opacity-95 transition-all flex items-center justify-center gap-2 group"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl font-medium text-xs bg-white text-black hover:bg-zinc-200 transition-all shadow-[0_0_25px_rgba(255,255,255,0.25)] flex items-center justify-center gap-2.5 group"
                 >
-                  <Compass className="w-4 h-4 group-hover:rotate-45 transition-transform" />
+                  <Compass className="w-4 h-4 transition-transform group-hover:rotate-45" />
                   <span>Launch Navigation Studio</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
 
                 <Link
                   href="/documentation"
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-semibold text-xs bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10 transition-all flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-medium text-xs liquid-glass-interactive text-zinc-300 hover:text-white flex items-center justify-center gap-2"
                 >
-                  <Code2 className="w-4 h-4 text-[#82B9FF]" />
-                  <span>Explore Architecture</span>
+                  <Code2 className="w-4 h-4 opacity-70" />
+                  <span>Technical Blueprint</span>
                 </Link>
               </div>
 
-              {/* Quick Spec Highlights */}
-              <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/[0.08] max-w-md mx-auto lg:mx-0 text-left">
+              {/* Minimalist Architectural Metadata Grid */}
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/[0.08] max-w-md mx-auto lg:mx-0 text-left">
                 <div>
-                  <span className="text-xl font-bold font-mono text-white">5+</span>
-                  <span className="text-[11px] text-[#929DA5] block">3D Environments</span>
+                  <span className="text-2xl font-display font-bold text-white tracking-tight">5</span>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block pt-0.5">Topologies</span>
                 </div>
                 <div>
-                  <span className="text-xl font-bold font-mono text-[#63E6D1]">EN / HI</span>
-                  <span className="text-[11px] text-[#929DA5] block">Multilingual Support</span>
+                  <span className="text-2xl font-display font-bold text-white tracking-tight">EN · HI · ES</span>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block pt-0.5">Multilingual</span>
                 </div>
                 <div>
-                  <span className="text-xl font-bold font-mono text-[#82B9FF]">RxR</span>
-                  <span className="text-[11px] text-[#929DA5] block">Standard Metrics</span>
+                  <span className="text-2xl font-display font-bold text-white tracking-tight">RxR</span>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block pt-0.5">Standard Metrics</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Hero 3D Simulation Canvas */}
+            {/* Right Column: Floating 3D Digital Twin Canvas */}
             <div className="lg:col-span-5 relative">
-              <div className="w-full h-[460px] rounded-3xl border border-white/10 bg-[#0A0D10]/80 backdrop-blur-2xl shadow-2xl overflow-hidden relative group">
+              <div className="w-full h-[480px] rounded-3xl liquid-glass-elevated relative overflow-hidden group">
                 <Hero3D />
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-[#0A0D10]/90 backdrop-blur-md border border-white/10 text-xs flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#63E6D1] animate-pulse" />
-                    <span className="font-mono text-white/90">Autonomous Policy Active</span>
+                {/* Floating Telemetry Glass Badge */}
+                <div className="absolute bottom-5 inset-x-5 p-3.5 rounded-xl liquid-glass-elevated flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] animate-pulse" />
+                    <span className="font-mono text-[11px] text-zinc-300 tracking-wide">
+                      Decision Policy Stream
+                    </span>
                   </div>
                   <Link
                     href="/navigation"
-                    className="text-[#63E6D1] font-semibold text-[11px] hover:underline flex items-center gap-1"
+                    className="text-white hover:text-zinc-300 text-[11px] font-medium flex items-center gap-1 group/btn"
                   >
-                    <span>Inspect</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>Launch</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                   </Link>
                 </div>
               </div>
@@ -118,218 +116,235 @@ export default function LandingPage() {
         </section>
 
         {/* SECTION 2: HOW THE AGENT WORKS */}
-        <section id="features" className="py-20 border-t border-white/[0.08] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#63E6D1]">
-              Architectural Pipeline
+        <section id="features" className="py-24 border-t border-white/[0.08] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl space-y-3 mb-16">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block">
+              Architectural Core
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              From Multilingual Cues to Spatial Action
+            <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-white tracking-tight">
+              From Multilingual Cues to Spatial Decisions
             </h2>
-            <p className="text-sm text-[#929DA5]">
-              Every navigation decision is computed through a calibrated sequence of language understanding, visual feature extraction, topological path planning, and uncertainty evaluation.
+            <p className="text-sm text-zinc-400 font-light leading-relaxed">
+              Every navigation step is evaluated through an integrated pipeline of natural language parsing, 360° visual landmark grounding, Dijkstra geodesic progress, and uncertainty estimation.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
               {
                 step: "01",
                 title: "Multilingual Instruction Parsing",
-                desc: "Extracts direction constraints, landmark mentions, and sequential waypoints across Roman and Devanagari scripts.",
+                desc: "Extracts direction constraints, landmark mentions, and sequential goals across English, Hindi, and Spanish.",
                 icon: Globe2,
-                color: "#63E6D1",
               },
               {
                 step: "02",
                 title: "Visual Scene Perception",
                 desc: "Evaluates 360° candidate viewpoints with visual-semantic cosine alignment against target landmarks.",
                 icon: Cpu,
-                color: "#82B9FF",
               },
               {
                 step: "03",
                 title: "Instruction-Conditioned Policy",
-                desc: "Hybrid scoring balances linguistic turn match, landmark evidence, Dijkstra geodesic progress, and loop penalties.",
+                desc: "Multi-criteria utility scoring balances heading vectors, landmark grounding, geodesic progress, and loop penalties.",
                 icon: Compass,
-                color: "#F5C66B",
               },
               {
                 step: "04",
-                title: "Uncertainty & Replanning",
-                desc: "Monitors candidate decision margins and missing landmark evidence to detect ambiguity before executing steps.",
+                title: "Uncertainty & Failure Detection",
+                desc: "Calculates candidate margin ambiguity and Shannon entropy to detect unfamiliar or ambiguous situations.",
                 icon: Activity,
-                color: "#7EE2A8",
               },
             ].map((f) => {
               const Icon = f.icon;
               return (
-                <div
+                <LiquidCard
                   key={f.step}
-                  className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-white/20 transition-all space-y-4 relative group"
+                  variant="subtle"
+                  className="p-6 space-y-4 hover:border-white/20 transition-all duration-300"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-extrabold text-[#929DA5]">{f.step}</span>
-                    <Icon className="w-5 h-5" style={{ color: f.color }} />
+                    <span className="font-mono text-xs font-bold text-zinc-600">{f.step}</span>
+                    <Icon className="w-4 h-4 text-zinc-400" />
                   </div>
-                  <h3 className="text-sm font-bold text-white group-hover:text-[#63E6D1] transition-colors">
+                  <h3 className="text-sm font-semibold text-white tracking-tight">
                     {f.title}
                   </h3>
-                  <p className="text-xs text-[#929DA5] leading-relaxed font-light">{f.desc}</p>
-                </div>
+                  <p className="text-xs text-zinc-400 leading-relaxed font-light">
+                    {f.desc}
+                  </p>
+                </LiquidCard>
               );
             })}
           </div>
         </section>
 
         {/* SECTION 3: MULTILINGUAL UNDERSTANDING DEMO */}
-        <section className="py-20 border-t border-white/[0.08] bg-[#070A0D]">
+        <section className="py-24 border-t border-white/[0.08] bg-black/40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div className="space-y-2">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#82B9FF]">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block">
                   Cross-Lingual Generalization
                 </span>
-                <h2 className="text-3xl font-extrabold text-white tracking-tight">
-                  English and Hindi Navigation Instructions
+                <h2 className="text-3xl font-display font-extrabold text-white tracking-tight">
+                  Multilingual Navigation Instructions
                 </h2>
-                <p className="text-sm text-[#929DA5] max-w-xl">
-                  Inspect how semantically equivalent instructions in English and Hindi are parsed and executed by the identical underlying decision policy.
+                <p className="text-sm text-zinc-400 max-w-xl font-light">
+                  Inspect how semantically equivalent instructions in English, Hindi, and Spanish are parsed into identical topological navigation plans.
                 </p>
               </div>
 
               {/* Language Switcher Tabs */}
-              <div className="flex rounded-xl bg-white/[0.04] p-1 border border-white/10 self-start">
-                <button
-                  onClick={() => setActiveTab("en")}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                    activeTab === "en" ? "bg-[#63E6D1] text-[#0A0D10]" : "text-[#929DA5] hover:text-white"
-                  }`}
-                >
-                  English Instruction
-                </button>
-                <button
-                  onClick={() => setActiveTab("hi")}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                    activeTab === "hi" ? "bg-[#63E6D1] text-[#0A0D10]" : "text-[#929DA5] hover:text-white"
-                  }`}
-                >
-                  हिन्दी (Hindi) Instruction
-                </button>
+              <div className="flex rounded-xl p-1 liquid-glass-subtle self-start">
+                {[
+                  { id: "en", label: "English" },
+                  { id: "hi", label: "हिन्दी (Hindi)" },
+                  { id: "es", label: "Español" },
+                ].map((lang) => (
+                  <button
+                    key={lang.id}
+                    onClick={() => setActiveTab(lang.id as any)}
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                      activeTab === lang.id
+                        ? "bg-white text-black shadow-sm font-semibold"
+                        : "text-zinc-400 hover:text-white"
+                    }`}
+                  >
+                    {lang.label}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Instruction Showcase Box */}
+            {/* Instruction Showcase Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="p-6 rounded-2xl bg-[#10161B] border border-white/10 space-y-4">
-                <span className="text-xs font-mono font-bold text-[#63E6D1] uppercase">
-                  Raw Natural Language Input ({activeTab.toUpperCase()})
-                </span>
-                <blockquote className="text-base text-white font-medium italic border-l-2 border-[#63E6D1] pl-4 py-1">
-                  {activeTab === "en"
-                    ? '"Walk forward past the reception desk, turn left at the central corridor, and enter the executive office at the end of the hall."'
-                    : '"सीधे गलियारे में आगे बढ़ें, सीढ़ियों के पास बाएं मुड़ें और रिसेप्शन डेस्क के सामने से गुजरते हुए आखिरी कमरे में जाएं।"'}
+              
+              <LiquidCard variant="default" className="p-7 space-y-5">
+                <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 font-semibold">
+                    Input Instruction ({activeTab.toUpperCase()})
+                  </span>
+                  <span className="text-[10px] font-mono text-zinc-500">Natural Language</span>
+                </div>
+                
+                <blockquote className="text-base text-zinc-200 font-light leading-relaxed pl-4 border-l-2 border-white/40 italic">
+                  {activeTab === "en" && '"Walk forward past the reception desk, turn left at the central corridor, and enter the executive office at the end of the hall."'}
+                  {activeTab === "hi" && '"सीधे गलियारे में आगे बढ़ें, सीढ़ियों के पास बाएं मुड़ें और रिसेप्शन डेस्क के सामने से गुजरते हुए आखिरी कमरे में जाएं।"'}
+                  {activeTab === "es" && '"Avanza pasando la recepción, gira a la izquierda en el pasillo central y entra a la oficina ejecutiva al final."'}
                 </blockquote>
-                <div className="flex items-center gap-2 pt-2">
+
+                <div className="pt-2">
                   <Link
                     href="/navigation"
-                    className="px-4 py-2 rounded-lg bg-[#63E6D1]/20 border border-[#63E6D1] text-[#63E6D1] text-xs font-bold hover:bg-[#63E6D1]/30 transition-all flex items-center gap-1.5"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium liquid-glass-interactive text-white"
                   >
+                    <Compass className="w-3.5 h-3.5 opacity-80" />
                     <span>Run in Navigation Studio</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
-              </div>
+              </LiquidCard>
 
-              <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3 text-xs font-mono">
-                <span className="text-xs font-bold text-[#82B9FF] uppercase tracking-wider block">
-                  Parsed Structured Representation
-                </span>
-                <div className="p-3.5 rounded-xl bg-[#0A0D10] border border-white/5 space-y-1.5 text-white/90">
-                  <div><span className="text-[#929DA5]">language:</span> <span className="text-[#63E6D1]">"{activeTab}"</span></div>
-                  <div><span className="text-[#929DA5]">initial_direction:</span> <span className="text-[#82B9FF]">"forward"</span></div>
-                  <div><span className="text-[#929DA5]">landmarks:</span> <span className="text-white">["reception", "corridor", "room"]</span></div>
-                  <div><span className="text-[#929DA5]">destination:</span> <span className="text-[#7EE2A8]">"executive_office"</span></div>
-                  <div><span className="text-[#929DA5]">waypoints:</span> <span className="text-[#F5C66B]">["reception", "corridor_south", "executive_office"]</span></div>
+              <LiquidCard variant="subtle" className="p-7 space-y-4 font-mono text-xs">
+                <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+                  <span className="text-[10px] uppercase tracking-widest text-zinc-400 font-semibold">
+                    Structured Semantic Output
+                  </span>
+                  <span className="text-[10px] text-zinc-500">JSON Payload</span>
                 </div>
-              </div>
+                
+                <div className="p-4 rounded-xl bg-black/60 border border-white/5 space-y-2 text-zinc-300">
+                  <div><span className="text-zinc-500">language:</span> <span className="text-white">"{activeTab}"</span></div>
+                  <div><span className="text-zinc-500">initial_direction:</span> <span className="text-white">"forward"</span></div>
+                  <div><span className="text-zinc-500">landmarks:</span> <span className="text-zinc-300">["reception", "corridor", "office"]</span></div>
+                  <div><span className="text-zinc-500">destination:</span> <span className="text-white font-semibold">"executive_office"</span></div>
+                  <div><span className="text-zinc-500">waypoints:</span> <span className="text-zinc-400">["reception", "corridor_south", "executive_office"]</span></div>
+                </div>
+              </LiquidCard>
+
             </div>
           </div>
         </section>
 
         {/* SECTION 4: RXR BENCHMARK METRICS */}
-        <section className="py-20 border-t border-white/[0.08] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#7EE2A8]">
-              Standardized Evaluation
+        <section className="py-24 border-t border-white/[0.08] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl space-y-3 mb-16">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 block">
+              Standardized Research Evaluation
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-white tracking-tight">
               Google Research RxR Metrics
             </h2>
-            <p className="text-sm text-[#929DA5]">
-              Every navigation trajectory is scored using established Room-Across-Room research metrics to evaluate both goal attainment and trajectory fidelity.
+            <p className="text-sm text-zinc-400 font-light leading-relaxed">
+              Every navigation trajectory is scored against established Room-Across-Room research metrics to evaluate both final destination precision and path fidelity.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-2">
-              <span className="text-xs font-mono text-[#63E6D1] font-bold block">SR</span>
-              <h3 className="text-sm font-bold text-white">Success Rate</h3>
-              <p className="text-xs text-[#929DA5] leading-relaxed">
-                Binary indicator of whether the agent stopped within 3.0 meters of the intended target destination.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-2">
-              <span className="text-xs font-mono text-[#82B9FF] font-bold block">SPL</span>
-              <h3 className="text-sm font-bold text-white">Success Weighted by Path Length</h3>
-              <p className="text-xs text-[#929DA5] leading-relaxed">
-                Penalizes meandering or excessive trajectories: S · (L_optimal / max(L_optimal, L_agent)).
-              </p>
-            </div>
-
-
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-2">
-              <span className="text-xs font-mono text-[#F5C66B] font-bold block">nDTW</span>
-              <h3 className="text-sm font-bold text-white">Normalized Dynamic Time Warping</h3>
-              <p className="text-xs text-[#929DA5] leading-relaxed">
-                Measures the continuous geodesic alignment between the agent path and the reference human demonstrator path.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-2">
-              <span className="text-xs font-mono text-[#7EE2A8] font-bold block">SDTW</span>
-              <h3 className="text-sm font-bold text-white">Success Weighted nDTW</h3>
-              <p className="text-xs text-[#929DA5] leading-relaxed">
-                Strict metric that rewards high path fidelity only when the final destination is successfully attained.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              {
+                id: "SR",
+                name: "Success Rate",
+                desc: "Percentage of navigation episodes terminating within 3.0 meters of the ground-truth destination node.",
+              },
+              {
+                id: "SPL",
+                name: "Success by Path Length",
+                desc: "Evaluates trajectory optimality: rewards short, direct paths and penalizes unnecessary looping.",
+              },
+              {
+                id: "nDTW",
+                name: "Normalized DTW",
+                desc: "Calculates continuous Dynamic Time Warping alignment between agent trajectory and reference human path.",
+              },
+              {
+                id: "SDTW",
+                name: "Success Weighted nDTW",
+                desc: "Strict combination metric that requires both successful destination arrival and high trajectory fidelity.",
+              },
+            ].map((metric) => (
+              <LiquidCard key={metric.id} variant="subtle" className="p-6 space-y-3">
+                <span className="text-xs font-mono font-bold text-white block tracking-wider">
+                  {metric.id}
+                </span>
+                <h3 className="text-sm font-semibold text-zinc-200">
+                  {metric.name}
+                </h3>
+                <p className="text-xs text-zinc-400 leading-relaxed font-light">
+                  {metric.desc}
+                </p>
+              </LiquidCard>
+            ))}
           </div>
         </section>
 
         {/* SECTION 5: FOOTER CALL TO ACTION */}
-        <section className="py-20 border-t border-white/[0.08] bg-gradient-to-b from-[#0A0D10] to-[#10161B]">
+        <section className="py-24 border-t border-white/[0.08] bg-black">
           <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-              Ready to explore autonomous navigation?
+            <h2 className="text-4xl sm:text-5xl font-display font-extrabold text-white tracking-tight">
+              Explore Autonomous Navigation
             </h2>
-            <p className="text-sm text-[#929DA5] max-w-xl mx-auto font-light">
+            <p className="text-sm text-zinc-400 max-w-xl mx-auto font-light leading-relaxed">
               Experience the 3D interactive simulator, test multilingual navigation instructions in real-time, and inspect grounded decisions.
             </p>
             <div className="pt-2">
               <Link
                 href="/navigation"
-                className="px-8 py-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#63E6D1] to-[#82B9FF] text-[#0A0D10] shadow-2xl shadow-[#63E6D1]/30 hover:opacity-95 transition-all inline-flex items-center gap-2"
+                className="px-8 py-3.5 rounded-xl font-medium text-xs bg-white text-black hover:bg-zinc-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.25)] inline-flex items-center gap-2 group"
               >
-                <Compass className="w-5 h-5" />
-                <span>Launch Navigation Studio Now</span>
+                <Compass className="w-4 h-4 transition-transform group-hover:rotate-45" />
+                <span>Launch Navigation Studio</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
-            <div className="pt-8 text-xs text-[#929DA5] font-mono">
-              Navigate AI • Google Research Room-Across-Room (RxR) Reference System
+            <div className="pt-10 text-[11px] text-zinc-500 font-mono tracking-wider uppercase">
+              Navigate AI · Google Research Room-Across-Room (RxR) Challenge System
             </div>
           </div>
         </section>
+
       </div>
     </AppShell>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Compass, Target, MapPin } from "lucide-react";
+import { Compass } from "lucide-react";
 
 interface NodeData {
   id: string;
@@ -39,7 +39,6 @@ export default function TopDownMap2D({
   targetWaypoint,
   onSelectNode,
 }: TopDownMap2DProps) {
-  // Compute bounding box of node positions
   const { minX, maxX, minZ, maxZ } = useMemo(() => {
     let minX = -10, maxX = 10, minZ = -5, maxZ = 20;
     if (nodes.length > 0) {
@@ -51,7 +50,6 @@ export default function TopDownMap2D({
     return { minX, maxX, minZ, maxZ };
   }, [nodes]);
 
-  // Coordinate mapping function to SVG coordinates
   const scale = 28;
   const width = Math.max(500, (maxX - minX) * scale);
   const height = Math.max(500, (maxZ - minZ) * scale);
@@ -69,7 +67,6 @@ export default function TopDownMap2D({
   const agentX = currentNode ? toSvgX(currentNode.position[0]) : 250;
   const agentY = currentNode ? toSvgY(currentNode.position[2]) : 250;
 
-  // Build traveled polyline path
   const traveledPolyline = useMemo(() => {
     return pathTraveled
       .map((nid) => {
@@ -80,7 +77,6 @@ export default function TopDownMap2D({
       .join(" ");
   }, [pathTraveled, nodeMap, minX, minZ]);
 
-  // Build reference polyline path
   const refPolyline = useMemo(() => {
     return referencePath
       .map((nid) => {
@@ -92,26 +88,26 @@ export default function TopDownMap2D({
   }, [referencePath, nodeMap, minX, minZ]);
 
   return (
-    <div className="w-full h-full relative bg-[#070A0D] flex flex-col items-center justify-center p-4 overflow-auto select-none">
-      <div className="relative border border-white/10 rounded-2xl bg-[#0A0D10]/90 backdrop-blur-xl p-4 shadow-2xl">
+    <div className="w-full h-full relative bg-black flex flex-col items-center justify-center p-6 overflow-auto select-none">
+      <div className="relative liquid-glass-elevated p-6 rounded-3xl">
         <svg
           width={width}
           height={height}
           viewBox={`0 0 ${width} ${height}`}
           className="overflow-visible"
         >
-          {/* Subtle Background Grid Pattern */}
+          {/* Subtle Grid Pattern */}
           <defs>
             <pattern id="grid2d" width="28" height="28" patternUnits="userSpaceOnUse">
               <path
                 d="M 28 0 L 0 0 0 28"
                 fill="none"
-                stroke="rgba(255,255,255,0.03)"
+                stroke="rgba(255,255,255,0.04)"
                 strokeWidth="1"
               />
             </pattern>
           </defs>
-          <rect width={width} height={height} fill="url(#grid2d)" />
+          <rect width={width} height={height} fill="url(#grid2d)" rx="16" />
 
           {/* Graph Edges */}
           {edges.map((e, idx) => {
@@ -129,39 +125,39 @@ export default function TopDownMap2D({
                 y1={y1}
                 x2={x2}
                 y2={y2}
-                stroke="#1F2937"
-                strokeWidth="2.5"
+                stroke="#27272A"
+                strokeWidth="2.0"
                 strokeLinecap="round"
               />
             );
           })}
 
-          {/* Reference Shortest Path (Dashed Blue) */}
+          {/* Reference Path (Dashed Silver) */}
           {refPolyline && (
             <polyline
               points={refPolyline}
               fill="none"
-              stroke="#82B9FF"
-              strokeWidth="2"
+              stroke="#71717A"
+              strokeWidth="1.8"
               strokeDasharray="4 4"
-              opacity="0.6"
+              opacity="0.5"
             />
           )}
 
-          {/* Traveled Path (Solid Teal Glow) */}
+          {/* Traveled Path (Solid Glowing White) */}
           {traveledPolyline && (
             <polyline
               points={traveledPolyline}
               fill="none"
-              stroke="#63E6D1"
-              strokeWidth="4"
+              stroke="#FFFFFF"
+              strokeWidth="3.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              opacity="0.9"
+              opacity="0.95"
             />
           )}
 
-          {/* Render All Node Boxes & Labels */}
+          {/* Node Cards */}
           {nodes.map((n) => {
             const cx = toSvgX(n.position[0]);
             const cy = toSvgY(n.position[2]);
@@ -169,17 +165,18 @@ export default function TopDownMap2D({
             const isGoal = n.id === goalNodeId;
             const isWaypoint = n.id === targetWaypoint;
 
-            let borderColor = "#374151";
-            let bgColor = "#10161B";
+            let borderColor = "rgba(255, 255, 255, 0.1)";
+            let bgColor = "rgba(18, 18, 22, 0.85)";
+
             if (isCurrent) {
-              borderColor = "#63E6D1";
-              bgColor = "#0F2823";
+              borderColor = "#FFFFFF";
+              bgColor = "#27272A";
             } else if (isGoal) {
-              borderColor = "#FF7777";
-              bgColor = "#281216";
+              borderColor = "#E4E4E7";
+              bgColor = "#18181B";
             } else if (isWaypoint) {
-              borderColor = "#F5C66B";
-              bgColor = "#262013";
+              borderColor = "#A1A1AA";
+              bgColor = "#18181B";
             }
 
             return (
@@ -188,27 +185,25 @@ export default function TopDownMap2D({
                 onClick={() => onSelectNode?.(n.id)}
                 className="cursor-pointer transition-transform hover:scale-105"
               >
-                {/* Node Boundary */}
                 <rect
-                  x={cx - 36}
+                  x={cx - 38}
                   y={cy - 22}
-                  width="72"
+                  width="76"
                   height="44"
-                  rx="8"
+                  rx="10"
                   fill={bgColor}
                   stroke={borderColor}
-                  strokeWidth={isCurrent ? "2.5" : "1.5"}
+                  strokeWidth={isCurrent ? "2.2" : "1.2"}
                   className="transition-colors"
                 />
 
-                {/* Node ID / Type Text */}
                 <text
                   x={cx}
                   y={cy - 4}
                   textAnchor="middle"
-                  fill={isCurrent ? "#63E6D1" : "#F4F7F8"}
+                  fill={isCurrent ? "#FFFFFF" : "#E4E4E7"}
                   fontSize="10"
-                  fontWeight="600"
+                  fontWeight={isCurrent ? "700" : "500"}
                   fontFamily="Inter, sans-serif"
                 >
                   {n.room_type.length > 12 ? n.room_type.slice(0, 10) + "…" : n.room_type}
@@ -218,20 +213,19 @@ export default function TopDownMap2D({
                   x={cx}
                   y={cy + 10}
                   textAnchor="middle"
-                  fill="#929DA5"
+                  fill="#71717A"
                   fontSize="8"
-                  fontFamily="monospace"
+                  fontFamily="JetBrains Mono, monospace"
                 >
                   {n.id}
                 </text>
 
-                {/* Landmark Indicator Icon */}
                 {isGoal && (
                   <circle
-                    cx={cx + 28}
+                    cx={cx + 30}
                     cy={cy - 14}
                     r="4"
-                    fill="#FF7777"
+                    fill="#FFFFFF"
                     className="animate-ping"
                   />
                 )}
@@ -239,24 +233,21 @@ export default function TopDownMap2D({
             );
           })}
 
-          {/* Agent Heading & Direction Marker */}
+          {/* Agent Heading & Position Marker */}
           <g transform={`translate(${agentX}, ${agentY})`}>
-            {/* Outer Pulsing Ring */}
             <circle
               r="18"
-              fill="rgba(99, 230, 209, 0.15)"
-              stroke="#63E6D1"
+              fill="rgba(255, 255, 255, 0.12)"
+              stroke="#FFFFFF"
               strokeWidth="1.5"
               className="animate-pulse"
             />
-            {/* Center Robot Beacon */}
-            <circle r="9" fill="#63E6D1" />
-            {/* Heading Arrow Pointer */}
+            <circle r="8" fill="#FFFFFF" />
             <g transform={`rotate(${currentHeading})`}>
               <polygon
                 points="0,-16 -6,-6 6,-6"
-                fill="#82B9FF"
-                stroke="#0A0D10"
+                fill="#FFFFFF"
+                stroke="#000000"
                 strokeWidth="1"
               />
             </g>
@@ -264,24 +255,24 @@ export default function TopDownMap2D({
         </svg>
 
         {/* 2D HUD Legend */}
-        <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-[#929DA5]">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#63E6D1]" />
-              <span>Current Position</span>
+        <div className="mt-4 pt-3.5 border-t border-white/[0.08] flex items-center justify-between text-xs text-zinc-400">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+              <span className="text-white font-medium">Agent</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FF7777]" />
-              <span>Goal</span>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full border border-white/60 bg-white/20" />
+              <span>Goal Destination</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#F5C66B]" />
-              <span>Waypoint</span>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-zinc-600" />
+              <span>Reference</span>
             </div>
           </div>
-          <div className="flex items-center gap-1 text-[#63E6D1]">
-            <Compass className="w-3.5 h-3.5" />
-            <span className="font-mono">{Math.round(currentHeading)}°</span>
+          <div className="flex items-center gap-1.5 text-zinc-300 font-mono text-xs">
+            <Compass className="w-3.5 h-3.5 opacity-80" />
+            <span>{Math.round(currentHeading)}°</span>
           </div>
         </div>
       </div>

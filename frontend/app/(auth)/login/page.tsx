@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import LiquidCard from "@/components/ui/LiquidCard";
 import { loginUser } from "@/lib/api";
-import { Compass, Lock, Mail, Eye, EyeOff, Sparkles, ArrowRight } from "lucide-react";
+import { Compass, Mail, Lock, Eye, EyeOff, Sparkles, ArrowRight } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -34,44 +35,44 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0D10] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background glow effects */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#63E6D1]/10 rounded-full blur-[120px] pointer-events-none" />
-
+    <div className="min-h-screen bg-black text-white flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+      
+      {/* Header Logo */}
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 space-y-3 text-center">
-        <Link href="/" className="inline-flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#63E6D1] to-[#82B9FF] p-[1px] shadow-lg shadow-[#63E6D1]/20">
-            <div className="w-full h-full bg-[#0A0D10] rounded-[11px] flex items-center justify-center">
-              <Compass className="w-5 h-5 text-[#63E6D1]" />
-            </div>
+        <Link href="/" className="inline-flex items-center gap-3 group">
+          <div className="w-8 h-8 rounded-xl liquid-glass-elevated flex items-center justify-center transition-all group-hover:scale-105">
+            <Compass className="w-4 h-4 text-white group-hover:rotate-45 transition-transform duration-500" />
           </div>
-          <span className="font-bold tracking-wider text-xl text-white">NAVIGATE AI</span>
+          <span className="font-display font-bold tracking-tight text-lg text-white">NAVIGATE AI</span>
         </Link>
-        <h2 className="text-2xl font-extrabold text-white">Sign In to Research Lab</h2>
-        <p className="text-xs text-[#929DA5]">Access multimodal vision-and-language decision models</p>
+        <h2 className="text-2xl font-display font-extrabold text-white tracking-tight">
+          Sign In to Research Lab
+        </h2>
+        <p className="text-xs text-zinc-400 font-light">Access multimodal vision-and-language decision models</p>
       </div>
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4">
-        <div className="p-8 rounded-2xl bg-[#10161B]/90 backdrop-blur-xl border border-white/10 shadow-2xl space-y-6">
-          {/* Quick Demo Credentials Fill Button */}
+        <LiquidCard variant="elevated" className="p-8 space-y-6">
+          
+          {/* 1-Click Auto Fill Demo Credentials Button */}
           <button
             type="button"
             onClick={fillDemoAccount}
-            className="w-full py-2.5 px-3 rounded-xl bg-[#63E6D1]/10 hover:bg-[#63E6D1]/15 border border-[#63E6D1]/30 text-xs font-semibold text-[#63E6D1] flex items-center justify-center gap-2 transition-all"
+            className="w-full py-2.5 px-3 rounded-xl liquid-glass-interactive text-xs font-medium text-white flex items-center justify-center gap-2"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5 opacity-80" />
             <span>Auto-fill Demo Researcher Account</span>
           </button>
 
           {error && (
-            <div className="p-3 rounded-xl bg-[#FF7777]/10 border border-[#FF7777]/30 text-xs text-[#FF7777]">
+            <div className="p-3 rounded-xl border border-red-500/30 bg-red-500/10 text-xs text-red-300">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="text-xs font-medium text-[#929DA5] block mb-1">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 block font-semibold">
                 Email Address
               </label>
               <div className="relative">
@@ -81,14 +82,14 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="researcher@navigate.ai"
-                  className="w-full bg-[#0A0D10] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#63E6D1] pl-9"
+                  className="w-full bg-black/60 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-white/30 pl-9"
                 />
-                <Mail className="w-4 h-4 text-[#929DA5] absolute left-3 top-3" />
+                <Mail className="w-4 h-4 text-zinc-500 absolute left-3 top-3" />
               </div>
             </div>
 
-            <div>
-              <label className="text-xs font-medium text-[#929DA5] block mb-1">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 block font-semibold">
                 Password
               </label>
               <div className="relative">
@@ -98,13 +99,13 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full bg-[#0A0D10] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#63E6D1] pl-9 pr-9"
+                  className="w-full bg-black/60 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-white/30 pl-9 pr-9 font-mono"
                 />
-                <Lock className="w-4 h-4 text-[#929DA5] absolute left-3 top-3" />
+                <Lock className="w-4 h-4 text-zinc-500 absolute left-3 top-3" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-[#929DA5] hover:text-white"
+                  className="absolute right-3 top-3 text-zinc-500 hover:text-white"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -114,21 +115,25 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-[#63E6D1] to-[#82B9FF] text-[#0A0D10] font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#63E6D1]/20 hover:opacity-95 transition-all"
+              className="w-full py-3 rounded-xl bg-white text-black font-semibold text-xs flex items-center justify-center gap-2 hover:bg-zinc-200 disabled:opacity-40 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             >
               <span>{loading ? "Authenticating..." : "Sign In"}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </form>
 
-          <div className="text-center text-xs text-[#929DA5] pt-2 border-t border-white/5">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-[#63E6D1] font-semibold hover:underline">
-              Create account
-            </Link>
+          <div className="text-center pt-2 border-t border-white/[0.08]">
+            <span className="text-xs text-zinc-500 font-light">
+              Need an account?{" "}
+              <Link href="/register" className="text-white hover:underline font-medium">
+                Create researcher account
+              </Link>
+            </span>
           </div>
-        </div>
+
+        </LiquidCard>
       </div>
+
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AmbientBackground from "@/components/ui/AmbientBackground";
 
 export const metadata: Metadata = {
   title: "Navigate AI | Multilingual Vision-and-Language Navigation Platform",
@@ -13,8 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark h-full antialiased">
-      <body className="min-h-full flex flex-col bg-[#0A0D10] text-[#F4F7F8] selection:bg-[#63E6D1]/20">
-        {children}
+      <body className="min-h-full flex flex-col bg-black text-white selection:bg-white/20 relative">
+        <AmbientBackground />
+        <div className="relative z-10 flex-1 flex flex-col">
+          {children}
+        </div>
       </body>
     </html>
   );

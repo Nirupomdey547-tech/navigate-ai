@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import LiquidCard from "@/components/ui/LiquidCard";
 import { registerUser } from "@/lib/api";
-import { Compass, Lock, Mail, User, ArrowRight } from "lucide-react";
+import { Compass, Mail, Lock, User, ArrowRight } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -28,33 +29,34 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0D10] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#82B9FF]/10 rounded-full blur-[120px] pointer-events-none" />
-
+    <div className="min-h-screen bg-black text-white flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+      
+      {/* Header Logo */}
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 space-y-3 text-center">
-        <Link href="/" className="inline-flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#63E6D1] to-[#82B9FF] p-[1px] shadow-lg shadow-[#63E6D1]/20">
-            <div className="w-full h-full bg-[#0A0D10] rounded-[11px] flex items-center justify-center">
-              <Compass className="w-5 h-5 text-[#63E6D1]" />
-            </div>
+        <Link href="/" className="inline-flex items-center gap-3 group">
+          <div className="w-8 h-8 rounded-xl liquid-glass-elevated flex items-center justify-center transition-all group-hover:scale-105">
+            <Compass className="w-4 h-4 text-white group-hover:rotate-45 transition-transform duration-500" />
           </div>
-          <span className="font-bold tracking-wider text-xl text-white">NAVIGATE AI</span>
+          <span className="font-display font-bold tracking-tight text-lg text-white">NAVIGATE AI</span>
         </Link>
-        <h2 className="text-2xl font-extrabold text-white">Create Researcher Account</h2>
-        <p className="text-xs text-[#929DA5]">Join the Multilingual Vision-and-Language Navigation Platform</p>
+        <h2 className="text-2xl font-display font-extrabold text-white tracking-tight">
+          Create Researcher Account
+        </h2>
+        <p className="text-xs text-zinc-400 font-light">Join the Multilingual Vision-and-Language Navigation Platform</p>
       </div>
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4">
-        <div className="p-8 rounded-2xl bg-[#10161B]/90 backdrop-blur-xl border border-white/10 shadow-2xl space-y-6">
+        <LiquidCard variant="elevated" className="p-8 space-y-6">
+          
           {error && (
-            <div className="p-3 rounded-xl bg-[#FF7777]/10 border border-[#FF7777]/30 text-xs text-[#FF7777]">
+            <div className="p-3 rounded-xl border border-red-500/30 bg-red-500/10 text-xs text-red-300">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="text-xs font-medium text-[#929DA5] block mb-1">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 block font-semibold">
                 Username
               </label>
               <div className="relative">
@@ -64,14 +66,14 @@ export default function RegisterPage() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="alex_research"
-                  className="w-full bg-[#0A0D10] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#63E6D1] pl-9"
+                  className="w-full bg-black/60 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-white/30 pl-9 font-mono"
                 />
-                <User className="w-4 h-4 text-[#929DA5] absolute left-3 top-3" />
+                <User className="w-4 h-4 text-zinc-500 absolute left-3 top-3" />
               </div>
             </div>
 
-            <div>
-              <label className="text-xs font-medium text-[#929DA5] block mb-1">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 block font-semibold">
                 Email Address
               </label>
               <div className="relative">
@@ -81,14 +83,14 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="alex@institute.edu"
-                  className="w-full bg-[#0A0D10] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#63E6D1] pl-9"
+                  className="w-full bg-black/60 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-white/30 pl-9"
                 />
-                <Mail className="w-4 h-4 text-[#929DA5] absolute left-3 top-3" />
+                <Mail className="w-4 h-4 text-zinc-500 absolute left-3 top-3" />
               </div>
             </div>
 
-            <div>
-              <label className="text-xs font-medium text-[#929DA5] block mb-1">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 block font-semibold">
                 Password
               </label>
               <div className="relative">
@@ -98,30 +100,34 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full bg-[#0A0D10] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#63E6D1] pl-9"
+                  className="w-full bg-black/60 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-white/30 pl-9 font-mono"
                 />
-                <Lock className="w-4 h-4 text-[#929DA5] absolute left-3 top-3" />
+                <Lock className="w-4 h-4 text-zinc-500 absolute left-3 top-3" />
               </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-[#63E6D1] to-[#82B9FF] text-[#0A0D10] font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#63E6D1]/20 hover:opacity-95 transition-all"
+              className="w-full py-3 rounded-xl bg-white text-black font-semibold text-xs flex items-center justify-center gap-2 hover:bg-zinc-200 disabled:opacity-40 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             >
-              <span>{loading ? "Creating Account..." : "Create Account"}</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>{loading ? "Registering..." : "Create Account"}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </form>
 
-          <div className="text-center text-xs text-[#929DA5] pt-2 border-t border-white/5">
-            Already have an account?{" "}
-            <Link href="/login" className="text-[#63E6D1] font-semibold hover:underline">
-              Sign In
-            </Link>
+          <div className="text-center pt-2 border-t border-white/[0.08]">
+            <span className="text-xs text-zinc-500 font-light">
+              Already have an account?{" "}
+              <Link href="/login" className="text-white hover:underline font-medium">
+                Sign in here
+              </Link>
+            </span>
           </div>
-        </div>
+
+        </LiquidCard>
       </div>
+
     </div>
   );
 }

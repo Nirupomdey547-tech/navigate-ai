@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import AppShell from "@/components/layout/AppShell";
+import LiquidCard from "@/components/ui/LiquidCard";
 import {
   getAnalyticsOverview,
   getAnalyticsLanguages,
@@ -19,19 +20,14 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
 } from "recharts";
 import {
   BarChart3,
   Download,
-  TrendingUp,
   Globe2,
   Layers,
-  Sparkles,
+  Activity,
 } from "lucide-react";
-
-const COLORS = ["#63E6D1", "#82B9FF", "#F5C66B", "#FF7777", "#7EE2A8"];
 
 export default function AnalyticsPage() {
   const [overview, setOverview] = useState<any>({});
@@ -67,38 +63,41 @@ export default function AnalyticsPage() {
     link.click();
   };
 
-  // Pie chart data for success vs failure
   const successPieData = [
-    { name: "Successful Runs", value: overview.successful_runs || 4 },
-    { name: "Failed / Incomplete", value: Math.max(0, (overview.completed_runs || 5) - (overview.successful_runs || 4)) },
+    { name: "Successful Goals", value: overview.successful_runs || 4 },
+    { name: "Halted / Incomplete", value: Math.max(0, (overview.completed_runs || 5) - (overview.successful_runs || 4)) },
   ];
 
   return (
     <AppShell>
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-black text-white">
+        
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs px-2 py-0.5 rounded font-mono font-bold bg-[#63E6D1]/10 text-[#63E6D1] border border-[#63E6D1]/20">
-                EVALUATION BENCHMARK
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-white/[0.08]">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full liquid-glass-subtle text-[11px] text-zinc-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+                BENCHMARK TELEMETRY
               </span>
-              <span className="text-xs text-[#929DA5]">Room-Across-Room (RxR) Performance</span>
+              <span className="text-white/20">/</span>
+              <span className="text-white font-medium">RxR Evaluation Analytics</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            
+            <h1 className="text-3xl sm:text-4xl font-display font-extrabold text-white tracking-tight">
               Evaluation Metrics & Analytics
             </h1>
-            <p className="text-sm text-[#929DA5] mt-1 max-w-2xl">
+            <p className="text-sm text-zinc-400 font-light max-w-2xl">
               Cross-lingual comparative analytics: Success Rate (SR), Success weighted by Path Length (SPL), Navigation Error (NE), and Normalized Dynamic Time Warping (nDTW).
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <button
               onClick={handleExportCsv}
-              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.1] text-white border border-white/10 flex items-center gap-2 transition-all"
+              className="px-5 py-2.5 rounded-xl text-xs font-medium liquid-glass-interactive text-zinc-200 hover:text-white flex items-center gap-2"
             >
-              <Download className="w-4 h-4 text-[#63E6D1]" />
+              <Download className="w-3.5 h-3.5 opacity-80" />
               <span>Export Benchmark CSV</span>
             </button>
           </div>
@@ -106,44 +105,66 @@ export default function AnalyticsPage() {
 
         {/* 4 Summary Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-            <span className="text-[11px] text-[#929DA5] uppercase block mb-1">Success Rate (SR)</span>
-            <span className="text-2xl font-bold font-mono text-[#7EE2A8]">
+          <LiquidCard variant="subtle" className="p-6 space-y-3">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block">
+              Success Rate (SR)
+            </span>
+            <span className="text-3xl font-display font-bold text-white tracking-tight">
               {Math.round((overview.success_rate || 0.85) * 100)}%
             </span>
-          </div>
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-            <span className="text-[11px] text-[#929DA5] uppercase block mb-1">Mean SPL</span>
-            <span className="text-2xl font-bold font-mono text-[#63E6D1]">
+            <span className="text-[11px] text-zinc-500 font-light block">
+              RxR goal attainment threshold (≤3.0m)
+            </span>
+          </LiquidCard>
+
+          <LiquidCard variant="subtle" className="p-6 space-y-3">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block">
+              Mean SPL Efficiency
+            </span>
+            <span className="text-3xl font-display font-bold text-white tracking-tight">
               {overview.average_spl ? Number(overview.average_spl).toFixed(3) : "0.912"}
             </span>
-          </div>
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-            <span className="text-[11px] text-[#929DA5] uppercase block mb-1">Mean Navigation Error</span>
-            <span className="text-2xl font-bold font-mono text-white">
+            <span className="text-[11px] text-zinc-500 font-light block">
+              Success weighted by path length
+            </span>
+          </LiquidCard>
+
+          <LiquidCard variant="subtle" className="p-6 space-y-3">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block">
+              Mean Navigation Error
+            </span>
+            <span className="text-3xl font-display font-bold text-white tracking-tight">
               {overview.average_navigation_error ? `${overview.average_navigation_error}m` : "0.35m"}
             </span>
-          </div>
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-            <span className="text-[11px] text-[#929DA5] uppercase block mb-1">Total Episodes Stored</span>
-            <span className="text-2xl font-bold font-mono text-[#82B9FF]">
+            <span className="text-[11px] text-zinc-500 font-light block">
+              Final geodesic distance from goal
+            </span>
+          </LiquidCard>
+
+          <LiquidCard variant="subtle" className="p-6 space-y-3">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block">
+              Recorded Episodes
+            </span>
+            <span className="text-3xl font-display font-bold text-white tracking-tight">
               {overview.total_runs || 16}
             </span>
-          </div>
+            <span className="text-[11px] text-zinc-500 font-light block">
+              Stored persistently in SQLite
+            </span>
+          </LiquidCard>
         </div>
 
-        {/* 2-Column Charts */}
+        {/* 2-Column Monochromatic Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
           {/* Chart 1: Performance by Language (English vs Hindi vs Spanish) */}
-          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                  <Globe2 className="w-4 h-4 text-[#63E6D1]" />
-                  <span>Success Rate & SPL by Language</span>
-                </h3>
-                <p className="text-xs text-[#929DA5]">Cross-lingual policy consistency</p>
-              </div>
+          <LiquidCard variant="default" className="p-7 space-y-5">
+            <div className="border-b border-white/[0.08] pb-4">
+              <h3 className="text-sm font-semibold text-white tracking-tight flex items-center gap-2">
+                <Globe2 className="w-4 h-4 text-zinc-400" />
+                <span>Success Rate & SPL by Language</span>
+              </h3>
+              <p className="text-xs text-zinc-400 font-light">Cross-lingual decision policy consistency</p>
             </div>
 
             <div className="h-64 w-full pt-2">
@@ -154,25 +175,25 @@ export default function AnalyticsPage() {
                   { language: "es", success_rate: 0.86, spl: 0.82 },
                 ]}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                  <XAxis dataKey="language" stroke="#929DA5" fontSize={11} tickFormatter={(v) => v.toUpperCase()} />
-                  <YAxis stroke="#929DA5" fontSize={11} domain={[0, 1]} />
+                  <XAxis dataKey="language" stroke="#71717A" fontSize={11} tickFormatter={(v) => v.toUpperCase()} />
+                  <YAxis stroke="#71717A" fontSize={11} domain={[0, 1]} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: "#10161B", borderColor: "rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: "12px" }}
+                    contentStyle={{ backgroundColor: "#09090B", borderColor: "rgba(255,255,255,0.15)", borderRadius: "12px", fontSize: "12px", color: "#FFFFFF" }}
                   />
-                  <Bar dataKey="success_rate" fill="#7EE2A8" name="Success Rate" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="spl" fill="#63E6D1" name="SPL" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="success_rate" fill="#FFFFFF" name="Success Rate" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="spl" fill="#71717A" name="SPL" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-          </div>
+          </LiquidCard>
 
           {/* Chart 2: Success vs Failure Distribution */}
-          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl space-y-4">
-            <div>
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                Task Completion Ratio
+          <LiquidCard variant="default" className="p-7 space-y-5">
+            <div className="border-b border-white/[0.08] pb-4">
+              <h3 className="text-sm font-semibold text-white tracking-tight">
+                Episode Completion Distribution
               </h3>
-              <p className="text-xs text-[#929DA5]">Overall navigation episode outcomes</p>
+              <p className="text-xs text-zinc-400 font-light">Goal attainment vs premature halt</p>
             </div>
 
             <div className="h-64 w-full flex items-center justify-center">
@@ -182,33 +203,32 @@ export default function AnalyticsPage() {
                     data={successPieData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={90}
-                    paddingAngle={5}
+                    innerRadius={65}
+                    outerRadius={95}
+                    paddingAngle={4}
                     dataKey="value"
                   >
-                    <Cell fill="#7EE2A8" />
-                    <Cell fill="#FF7777" />
+                    <Cell fill="#FFFFFF" />
+                    <Cell fill="#27272A" />
                   </Pie>
                   <Tooltip
-                    contentStyle={{ backgroundColor: "#10161B", borderColor: "rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: "12px" }}
+                    contentStyle={{ backgroundColor: "#09090B", borderColor: "rgba(255,255,255,0.15)", borderRadius: "12px", fontSize: "12px", color: "#FFFFFF" }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             </div>
-          </div>
+          </LiquidCard>
+
         </div>
 
         {/* Chart 3: Environment Performance Comparison */}
-        <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <Layers className="w-4 h-4 text-[#82B9FF]" />
-                <span>Environment Performance Comparison</span>
-              </h3>
-              <p className="text-xs text-[#929DA5]">Success rate and efficiency across distinct topologies</p>
-            </div>
+        <LiquidCard variant="subtle" className="p-7 space-y-5">
+          <div className="border-b border-white/[0.08] pb-4">
+            <h3 className="text-sm font-semibold text-white tracking-tight flex items-center gap-2">
+              <Layers className="w-4 h-4 text-zinc-400" />
+              <span>Environment Topology Comparison</span>
+            </h3>
+            <p className="text-xs text-zinc-400 font-light">Performance consistency across varied floor layouts</p>
           </div>
 
           <div className="h-64 w-full pt-2">
@@ -221,17 +241,18 @@ export default function AnalyticsPage() {
                 { environment_id: "multi_room_indoor", success_rate: 0.82, spl: 0.79 },
               ]}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="environment_id" stroke="#929DA5" fontSize={11} tickFormatter={(v) => v.replace(/_/g, " ")} />
-                <YAxis stroke="#929DA5" fontSize={11} domain={[0, 1]} />
+                <XAxis dataKey="environment_id" stroke="#71717A" fontSize={11} tickFormatter={(v) => v.replace(/_/g, " ")} />
+                <YAxis stroke="#71717A" fontSize={11} domain={[0, 1]} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: "#10161B", borderColor: "rgba(255,255,255,0.1)", borderRadius: "8px", fontSize: "12px" }}
+                  contentStyle={{ backgroundColor: "#09090B", borderColor: "rgba(255,255,255,0.15)", borderRadius: "12px", fontSize: "12px", color: "#FFFFFF" }}
                 />
-                <Bar dataKey="success_rate" fill="#63E6D1" name="Success Rate" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="spl" fill="#82B9FF" name="SPL" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="success_rate" fill="#FFFFFF" name="Success Rate" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="spl" fill="#71717A" name="SPL" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </LiquidCard>
+
       </div>
     </AppShell>
   );

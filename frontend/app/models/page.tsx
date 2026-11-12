@@ -2,16 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import AppShell from "@/components/layout/AppShell";
+import LiquidCard from "@/components/ui/LiquidCard";
 import { getModels } from "@/lib/api";
 import {
   Cpu,
-  Layers,
   Globe2,
   CheckCircle2,
-  AlertTriangle,
-  Zap,
   Activity,
-  Sparkles,
+  Compass,
 } from "lucide-react";
 
 export default function ModelsPage() {
@@ -26,168 +24,181 @@ export default function ModelsPage() {
 
   return (
     <AppShell>
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-black text-white">
+        
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs px-2 py-0.5 rounded font-mono font-bold bg-[#63E6D1]/10 text-[#63E6D1] border border-[#63E6D1]/20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-white/[0.08]">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full liquid-glass-subtle text-[11px] text-zinc-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                 ARCHITECTURE REGISTRY
               </span>
-              <span className="text-xs text-[#929DA5]">Integrated AI Models & Perception Layers</span>
+              <span className="text-white/20">/</span>
+              <span className="text-white font-medium">Model Telemetry</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              AI Models & Pipelines
+            
+            <h1 className="text-3xl sm:text-4xl font-display font-extrabold text-white tracking-tight">
+              AI Models & Perception Pipelines
             </h1>
-            <p className="text-sm text-[#929DA5] mt-1 max-w-2xl">
-              Inspect installed multilingual encoders, vision perception backbones, decision policy weights, and hardware acceleration devices.
+            <p className="text-sm text-zinc-400 font-light max-w-2xl">
+              Inspect installed multilingual encoders, vision perception backbones, decision policy weights, and runtime execution hardware.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1.5 rounded-full bg-[#7EE2A8]/10 border border-[#7EE2A8]/30 text-xs font-mono font-bold text-[#7EE2A8] flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#7EE2A8] animate-pulse" />
-              <span>Device: CPU Execution</span>
+            <span className="px-3 py-1.5 rounded-full liquid-glass-subtle text-xs font-mono text-zinc-300 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)] animate-pulse" />
+              <span>Hardware: Standard CPU (Optimized NumPy/SciPy)</span>
             </span>
           </div>
         </div>
 
         {/* 4 Architecture Component Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
           {/* Component 1: Multilingual Language Encoder */}
-          <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-[#63E6D1]/10 text-[#63E6D1]">
-                  <Globe2 className="w-5 h-5" />
+          <LiquidCard variant="default" className="p-7 space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                  <Globe2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Multilingual Language Encoder</h3>
-                  <span className="text-[11px] text-[#929DA5] font-mono">
+                  <h3 className="text-sm font-semibold text-white tracking-tight">Multilingual Language Encoder</h3>
+                  <span className="text-[11px] text-zinc-400 font-mono">
                     {components.language_encoder?.checkpoint || "MiniLM-L12-v2"}
                   </span>
                 </div>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#7EE2A8]/20 text-[#7EE2A8]">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase border border-white/20 bg-white/5 text-white">
                 Active
               </span>
             </div>
 
-            <p className="text-xs text-[#929DA5] leading-relaxed">
+            <p className="text-xs text-zinc-400 font-light leading-relaxed">
               Extracts spatial constraints, directional headings, landmark references, and sequential goal waypoints across Roman and Devanagari scripts.
             </p>
 
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-white/5">
-              <div className="bg-white/5 p-2 rounded">
-                <span className="text-[10px] text-[#929DA5] block">Embedding Dim</span>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2">
+              <div className="bg-black/60 border border-white/5 p-3 rounded-xl">
+                <span className="text-[10px] text-zinc-500 block">Embedding Dim</span>
                 <span className="text-white font-bold">{components.language_encoder?.embedding_dim || 384}</span>
               </div>
-              <div className="bg-white/5 p-2 rounded">
-                <span className="text-[10px] text-[#929DA5] block">Fallback Mode</span>
-                <span className="text-white font-bold">TF-IDF Char N-Gram</span>
+              <div className="bg-black/60 border border-white/5 p-3 rounded-xl">
+                <span className="text-[10px] text-zinc-500 block">Fallback Mode</span>
+                <span className="text-white font-bold">TF-IDF N-Gram Matching</span>
               </div>
             </div>
-          </div>
+          </LiquidCard>
 
           {/* Component 2: Vision-Language Perception */}
-          <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-[#82B9FF]/10 text-[#82B9FF]">
-                  <Cpu className="w-5 h-5" />
+          <LiquidCard variant="default" className="p-7 space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                  <Cpu className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Vision-Language Perception Backbone</h3>
-                  <span className="text-[11px] text-[#929DA5] font-mono">
-                    {components.vision_encoder?.checkpoint || "CLIP-ViT-B/32"}
+                  <h3 className="text-sm font-semibold text-white tracking-tight">360° Visual Perception Engine</h3>
+                  <span className="text-[11px] text-zinc-400 font-mono">
+                    Multi-view Cosine Grounding
                   </span>
                 </div>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#7EE2A8]/20 text-[#7EE2A8]">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase border border-white/20 bg-white/5 text-white">
                 Active
               </span>
             </div>
 
-            <p className="text-xs text-[#929DA5] leading-relaxed">
-              Aligns visual viewpoint observations with textual landmark queries. Computes cosine similarity between 360-degree viewpoint angles and detected targets.
+            <p className="text-xs text-zinc-400 font-light leading-relaxed">
+              Synthesizes 4 continuous panoramic observation angles ($0^\circ, 90^\circ, 180^\circ, 270^\circ$) and matches candidate views against target landmark embeddings.
             </p>
 
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-white/5">
-              <div className="bg-white/5 p-2 rounded">
-                <span className="text-[10px] text-[#929DA5] block">Feature Dim</span>
-                <span className="text-white font-bold">{components.vision_encoder?.feature_dim || 512}</span>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2">
+              <div className="bg-black/60 border border-white/5 p-3 rounded-xl">
+                <span className="text-[10px] text-zinc-500 block">Panoramic Views</span>
+                <span className="text-white font-bold">4-Quadrant 360°</span>
               </div>
-              <div className="bg-white/5 p-2 rounded">
-                <span className="text-[10px] text-[#929DA5] block">Observation Mode</span>
-                <span className="text-white font-bold">Structured Vision</span>
+              <div className="bg-black/60 border border-white/5 p-3 rounded-xl">
+                <span className="text-[10px] text-zinc-500 block">Similarity Function</span>
+                <span className="text-white font-bold">Cosine Metric</span>
               </div>
             </div>
-          </div>
+          </LiquidCard>
 
-          {/* Component 3: Decision Policy */}
-          <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-[#F5C66B]/10 text-[#F5C66B]">
-                  <Zap className="w-5 h-5" />
+          {/* Component 3: Instruction-Conditioned Decision Policy */}
+          <LiquidCard variant="default" className="p-7 space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                  <Compass className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Multimodal Decision Policy</h3>
-                  <span className="text-[11px] text-[#929DA5] font-mono">
-                    Hybrid Geometric + Semantic Policy
+                  <h3 className="text-sm font-semibold text-white tracking-tight">Instruction-Conditioned Policy</h3>
+                  <span className="text-[11px] text-zinc-400 font-mono">
+                    Multi-Criteria Utility Scoring
                   </span>
                 </div>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#7EE2A8]/20 text-[#7EE2A8]">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase border border-white/20 bg-white/5 text-white">
                 Active
               </span>
             </div>
 
-            <p className="text-xs text-[#929DA5] leading-relaxed">
-              Combines instruction alignment, visual landmark matching, Dijkstra shortest-path progress, and history cycle penalties into normalized candidate scores.
+            <p className="text-xs text-zinc-400 font-light leading-relaxed">
+              Balances linguistic alignment, landmark verification, geodesic path reduction toward target destination, and visited-node loop suppression penalties.
             </p>
-          </div>
 
-          {/* Component 4: Uncertainty Estimator */}
-          <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-[#7EE2A8]/10 text-[#7EE2A8]">
-                  <Activity className="w-5 h-5" />
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2">
+              <div className="bg-black/60 border border-white/5 p-3 rounded-xl">
+                <span className="text-[10px] text-zinc-500 block">Path Planning</span>
+                <span className="text-white font-bold">NetworkX Dijkstra</span>
+              </div>
+              <div className="bg-black/60 border border-white/5 p-3 rounded-xl">
+                <span className="text-[10px] text-zinc-500 block">Loop Penalty Weight</span>
+                <span className="text-white font-bold">0.45 Exp</span>
+              </div>
+            </div>
+          </LiquidCard>
+
+          {/* Component 4: Uncertainty & Failure Detection */}
+          <LiquidCard variant="default" className="p-7 space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                  <Activity className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Uncertainty Estimator</h3>
-                  <span className="text-[11px] text-[#929DA5] font-mono">
-                    Candidate Margin & Evidence Verification
+                  <h3 className="text-sm font-semibold text-white tracking-tight">Calibrated Uncertainty Estimator</h3>
+                  <span className="text-[11px] text-zinc-400 font-mono">
+                    Shannon Entropy & Margin Ambiguity
                   </span>
                 </div>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-[#7EE2A8]/20 text-[#7EE2A8]">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase border border-white/20 bg-white/5 text-white">
                 Active
               </span>
             </div>
 
-            <p className="text-xs text-[#929DA5] leading-relaxed">
-              Estimates when the agent is uncertain due to candidate action ambiguity, missing visual landmarks, or unreachable goal topologies, recommending recovery actions.
+            <p className="text-xs text-zinc-400 font-light leading-relaxed">
+              Monitors the softmax candidate score margin and observation entropy to trigger ambiguity warnings, replanning routines, or human intervention.
             </p>
-          </div>
+
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2">
+              <div className="bg-black/60 border border-white/5 p-3 rounded-xl">
+                <span className="text-[10px] text-zinc-500 block">Ambiguity Metric</span>
+                <span className="text-white font-bold">ΔP = P(a1) - P(a2)</span>
+              </div>
+              <div className="bg-black/60 border border-white/5 p-3 rounded-xl">
+                <span className="text-[10px] text-zinc-500 block">Entropy Scaling</span>
+                <span className="text-white font-bold">Calibrated Softmax</span>
+              </div>
+            </div>
+          </LiquidCard>
+
         </div>
 
-        {/* Supported Languages Matrix */}
-        <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl space-y-4">
-          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-            Supported Languages & Tokenizers
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            {languages.map((l: any) => (
-              <div key={l.code} className="p-3 rounded-xl bg-white/[0.02] border border-white/5 text-center">
-                <span className="font-bold text-white block text-sm">{l.name}</span>
-                <span className="text-[11px] text-[#63E6D1] font-mono block">{l.native}</span>
-                <span className="text-[9px] text-[#7EE2A8] font-mono mt-1 block">Verified</span>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </AppShell>
   );

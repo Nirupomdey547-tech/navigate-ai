@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import AppShell from "@/components/layout/AppShell";
 import TopDownMap2D from "@/components/simulator/TopDownMap2D";
+import LiquidCard from "@/components/ui/LiquidCard";
 import { getHistory, getRunDetails, getRunReplay, getEnvironment } from "@/lib/api";
 import {
   History,
@@ -12,12 +13,7 @@ import {
   SkipForward,
   RotateCcw,
   CheckCircle2,
-  XCircle,
   Compass,
-  ArrowRight,
-  TrendingUp,
-  MapPin,
-  Sliders,
 } from "lucide-react";
 
 export default function HistoryPage() {
@@ -83,31 +79,36 @@ export default function HistoryPage() {
 
   return (
     <AppShell>
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-black text-white">
+        
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs px-2 py-0.5 rounded font-mono font-bold bg-[#63E6D1]/10 text-[#63E6D1] border border-[#63E6D1]/20">
-                RUN INSPECTOR
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-white/[0.08]">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full liquid-glass-subtle text-[11px] text-zinc-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+                AUDIT LOGS
               </span>
-              <span className="text-xs text-[#929DA5]">Audit Decision History & State Transitions</span>
+              <span className="text-white/20">/</span>
+              <span className="text-white font-medium">Trajectory Inspector</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Navigation History & Run Inspector
+            
+            <h1 className="text-3xl sm:text-4xl font-display font-extrabold text-white tracking-tight">
+              Navigation History & Replay
             </h1>
-            <p className="text-sm text-[#929DA5] mt-1 max-w-2xl">
-              Inspect past navigation episodes step-by-step. Replay agent trajectories, review decision rationales, confidence scores, and uncertainty states.
+            <p className="text-sm text-zinc-400 font-light max-w-2xl">
+              Inspect historical navigation episodes step-by-step. Replay agent trajectories, review decision rationales, confidence scores, and uncertainty states.
             </p>
           </div>
         </div>
 
         {/* 2-Column: Left Runs List, Right Step-by-Step Inspector */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
           {/* Left Runs List */}
           <div className="space-y-4">
-            <span className="text-xs font-bold text-[#929DA5] uppercase tracking-wider block">
-              Recorded Navigation Episodes ({runs.length})
+            <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block">
+              Recorded Episodes ({runs.length})
             </span>
 
             <div className="space-y-2 max-h-[750px] overflow-y-auto pr-1">
@@ -115,34 +116,34 @@ export default function HistoryPage() {
                 <button
                   key={r.id}
                   onClick={() => selectRun(r.id)}
-                  className={`w-full text-left p-3.5 rounded-xl border transition-all ${
+                  className={`w-full text-left p-4 rounded-2xl border transition-all ${
                     selectedRunId === r.id
-                      ? "bg-[#63E6D1]/10 border-[#63E6D1] shadow-md shadow-[#63E6D1]/10"
-                      : "bg-white/[0.02] border-white/5 hover:bg-white/[0.05]"
+                      ? "liquid-glass-elevated border-white/30 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.2)]"
+                      : "liquid-glass-subtle hover:border-white/20"
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-mono text-xs font-bold text-[#63E6D1]">
-                      Run #{r.id}
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="font-mono text-xs font-semibold text-white">
+                      Episode #{r.id}
                     </span>
                     <span
-                      className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                      className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded-full border ${
                         r.success === 1
-                          ? "bg-[#7EE2A8]/20 text-[#7EE2A8]"
-                          : "bg-[#FF7777]/20 text-[#FF7777]"
+                          ? "border-white/30 text-white bg-white/5"
+                          : "border-zinc-700 text-zinc-500 bg-transparent"
                       }`}
                     >
-                      {r.success === 1 ? "Success" : "Failed"}
+                      {r.success === 1 ? "Goal Reached" : "Halted"}
                     </span>
                   </div>
-                  <h4 className="text-xs font-semibold text-white/90 truncate">{r.environment_id}</h4>
-                  <p className="text-[11px] text-[#929DA5] line-clamp-2 mt-0.5 leading-snug">
+                  <h4 className="text-xs font-medium text-zinc-200 truncate">{r.environment_id}</h4>
+                  <p className="text-xs text-zinc-400 font-light line-clamp-2 mt-1 leading-relaxed">
                     {r.instruction}
                   </p>
-                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/5 text-[10px] text-[#929DA5] font-mono">
-                    <span className="uppercase">{r.language || "en"}</span>
+                  <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-white/[0.08] text-[10px] text-zinc-400 font-mono">
+                    <span className="uppercase text-white">{r.language || "en"}</span>
                     <span>{r.steps} steps</span>
-                    {r.metrics?.spl && <span className="text-[#82B9FF]">SPL: {r.metrics.spl}</span>}
+                    {r.metrics?.spl && <span className="text-zinc-300">SPL: {r.metrics.spl}</span>}
                   </div>
                 </button>
               ))}
@@ -154,32 +155,34 @@ export default function HistoryPage() {
             {runDetails && (
               <>
                 {/* Run Overview Metadata Card */}
-                <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl space-y-3">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div>
-                      <span className="text-[10px] font-mono text-[#63E6D1] uppercase font-bold">
-                        Episode Trace #{runDetails.id} • {runDetails.environment_id}
+                <LiquidCard variant="default" className="p-6 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest font-semibold block">
+                        Trace #{runDetails.id} · {runDetails.environment_id}
                       </span>
-                      <h3 className="text-sm font-bold text-white mt-0.5">{runDetails.instruction}</h3>
+                      <h3 className="text-sm font-semibold text-white leading-relaxed">
+                        {runDetails.instruction}
+                      </h3>
                     </div>
                     {runDetails.metrics && (
-                      <div className="flex gap-2 font-mono text-xs">
-                        <div className="bg-white/5 px-2.5 py-1 rounded">
-                          <span className="text-[9px] text-[#929DA5] block">SPL</span>
-                          <span className="font-bold text-[#63E6D1]">{runDetails.metrics.spl}</span>
+                      <div className="flex gap-2 font-mono text-xs shrink-0">
+                        <div className="p-2 rounded-lg bg-white/5 border border-white/10 text-center">
+                          <span className="text-[9px] text-zinc-500 block">SPL</span>
+                          <span className="font-bold text-white">{runDetails.metrics.spl}</span>
                         </div>
-                        <div className="bg-white/5 px-2.5 py-1 rounded">
-                          <span className="text-[9px] text-[#929DA5] block">SR</span>
-                          <span className="font-bold text-[#7EE2A8]">{runDetails.success ? "100%" : "0%"}</span>
+                        <div className="p-2 rounded-lg bg-white/5 border border-white/10 text-center">
+                          <span className="text-[9px] text-zinc-500 block">SR</span>
+                          <span className="font-bold text-white">{runDetails.success ? "100%" : "0%"}</span>
                         </div>
                       </div>
                     )}
                   </div>
-                </div>
+                </LiquidCard>
 
                 {/* 2D Topological Replay Viewer */}
                 {envData && (
-                  <div className="h-80 rounded-2xl border border-white/[0.08] overflow-hidden relative">
+                  <div className="h-80 rounded-3xl liquid-glass-elevated overflow-hidden relative">
                     <TopDownMap2D
                       nodes={envData.nodes || []}
                       edges={envData.edges || []}
@@ -193,13 +196,13 @@ export default function HistoryPage() {
 
                 {/* Scrubber Playback Controls */}
                 {replayData?.steps && replayData.steps.length > 0 && (
-                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-3">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-white">
-                        Timeline Step {currentStepIdx} of {replayData.steps.length - 1}
+                  <LiquidCard variant="subtle" className="p-5 space-y-4">
+                    <div className="flex items-center justify-between text-xs font-mono">
+                      <span className="text-zinc-300">
+                        Step {currentStepIdx} / {replayData.steps.length - 1}
                       </span>
-                      <span className="font-mono text-[#63E6D1]">
-                        Node: {activeStep?.node_id}
+                      <span className="text-white font-bold">
+                        Location: {activeStep?.node_id}
                       </span>
                     </div>
 
@@ -213,64 +216,66 @@ export default function HistoryPage() {
                         setIsPlaying(false);
                         setCurrentStepIdx(parseInt(e.target.value));
                       }}
-                      className="w-full accent-[#63E6D1]"
+                      className="w-full accent-white"
                     />
 
                     {/* Playback Buttons */}
                     <div className="flex items-center justify-center gap-3 pt-1">
                       <button
                         onClick={() => setCurrentStepIdx(0)}
-                        className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white"
+                        className="p-2 rounded-lg liquid-glass-interactive text-zinc-300 hover:text-white"
                       >
                         <SkipBack className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => setIsPlaying(!isPlaying)}
-                        className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#63E6D1] to-[#82B9FF] text-[#0A0D10] font-bold text-xs flex items-center gap-1.5 shadow-md shadow-[#63E6D1]/20"
+                        className="px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs flex items-center gap-2 hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                       >
-                        {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current" />}
-                        <span>{isPlaying ? "Pause" : "Play Replay"}</span>
+                        {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                        <span>{isPlaying ? "Pause" : "Play Timeline"}</span>
                       </button>
                       <button
                         onClick={() => setCurrentStepIdx(replayData.steps.length - 1)}
-                        className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white"
+                        className="p-2 rounded-lg liquid-glass-interactive text-zinc-300 hover:text-white"
                       >
                         <SkipForward className="w-4 h-4" />
                       </button>
                     </div>
-                  </div>
+                  </LiquidCard>
                 )}
 
                 {/* State Snapshot at Selected Step */}
                 {activeStep && (
-                  <div className="p-4 rounded-2xl bg-[#10161B] border border-white/[0.08] space-y-2 text-xs">
-                    <span className="text-[10px] font-semibold text-[#82B9FF] uppercase tracking-wider block">
+                  <LiquidCard variant="default" className="p-5 space-y-3 text-xs">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 font-semibold block">
                       Agent State Snapshot at Step #{currentStepIdx}
                     </span>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-                      <div className="p-2 rounded bg-white/5">
-                        <span className="text-[10px] text-[#929DA5] block">Current Node</span>
-                        <span className="font-bold text-[#63E6D1]">{activeStep.node_id}</span>
+                      <div className="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                        <span className="text-[9px] text-zinc-500 block">Current Room</span>
+                        <span className="font-bold text-white">{activeStep.node_id}</span>
                       </div>
-                      <div className="p-2 rounded bg-white/5">
-                        <span className="text-[10px] text-[#929DA5] block">Heading</span>
-                        <span className="font-bold text-white">{Math.round(activeStep.heading)}°</span>
+                      <div className="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                        <span className="text-[9px] text-zinc-500 block">Heading</span>
+                        <span className="font-bold text-zinc-200">{Math.round(activeStep.heading)}°</span>
                       </div>
-                      <div className="p-2 rounded bg-white/5">
-                        <span className="text-[10px] text-[#929DA5] block">Confidence</span>
-                        <span className="font-bold text-[#7EE2A8]">{Math.round(activeStep.confidence * 100)}%</span>
+                      <div className="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                        <span className="text-[9px] text-zinc-500 block">Confidence</span>
+                        <span className="font-bold text-white">{Math.round(activeStep.confidence * 100)}%</span>
                       </div>
-                      <div className="p-2 rounded bg-white/5">
-                        <span className="text-[10px] text-[#929DA5] block">Uncertainty</span>
-                        <span className="font-bold text-[#F5C66B]">{Math.round(activeStep.uncertainty * 100)}%</span>
+                      <div className="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                        <span className="text-[9px] text-zinc-500 block">Uncertainty</span>
+                        <span className="font-bold text-zinc-400">{Math.round(activeStep.uncertainty * 100)}%</span>
                       </div>
                     </div>
-                  </div>
+                  </LiquidCard>
                 )}
               </>
             )}
           </div>
+
         </div>
+
       </div>
     </AppShell>
   );
