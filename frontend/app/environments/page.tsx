@@ -20,6 +20,76 @@ export default function EnvironmentsPage() {
   const [jsonInput, setJsonInput] = useState<string>("");
   const [importStatus, setImportStatus] = useState<string | null>(null);
 
+  // Quick Room & Corridor Studio State
+  const [studioName, setStudioName] = useState<string>("Custom Penthouse Studio");
+  const [newRoomName, setNewRoomName] = useState<string>("");
+  const [newRoomX, setNewRoomX] = useState<string>("0");
+  const [newRoomY, setNewRoomY] = useState<string>("0");
+  const [newRoomLandmarks, setNewRoomLandmarks] = useState<string>("");
+  const [studioRooms, setStudioRooms] = useState<any[]>([
+    { id: "foyer", room_type: "Entrance Foyer", position: [0, 0, 0], landmarks: ["door", "shoe_rack"], description: "Front foyer" },
+    { id: "living", room_type: "Living Room", position: [3, 0, 0], landmarks: ["sofa", "coffee_table"], description: "Main living room" },
+    { id: "kitchen", room_type: "Kitchen", position: [6, 2, 0], landmarks: ["refrigerator", "counter"], description: "Chef kitchen" }
+  ]);
+
+  const handleAddStudioRoom = () => {
+    const name = newRoomName.trim() || `Room ${studioRooms.length + 1}`;
+    const id = name.toLowerCase().replace(/[^a-z0-9]/g, "_") + "_" + Date.now().toString().slice(-4);
+    const x = parseFloat(newRoomX) || 0;
+    const y = parseFloat(newRoomY) || 0;
+    const lms = newRoomLandmarks.split(",").map(s => s.trim()).filter(Boolean);
+    const newR = {
+      id,
+      room_type: name,
+      position: [x, y, 0],
+      landmarks: lms.length > 0 ? lms : [name.toLowerCase()],
+      description: `${name} area`
+    };
+    setStudioRooms(prev => [...prev, newR]);
+    setNewRoomName("");
+    setNewRoomX((x + 3).toString());
+    setNewRoomLandmarks("");
+  };
+
+  const handleRemoveStudioRoom = (index: number) => {
+    setStudioRooms(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSaveAndApplyStudio = async () => {
+    if (studioRooms.length < 2) return;
+    // Build linear chain edges between sequential rooms
+    const edges = [];
+    for (let i = 0; i < studioRooms.length - 1; i++) {
+      edges.push({
+        source: studioRooms[i].id,
+        target: studioRooms[i + 1].id,
+        distance: 3.0,
+        cost: 1.0,
+        action: "move_forward",
+        accessibility: true
+      });
+    }
+
+    const envData = {
+      id: "custom_" + studioName.toLowerCase().replace(/[^a-z0-9]/g, "_"),
+      name: studioName,
+      description: `Custom configured environment with ${studioRooms.length} rooms.`,
+      start_node_id: studioRooms[0].id,
+      goal_node_ids: [studioRooms[studioRooms.length - 1].id],
+      nodes: studioRooms,
+      edges
+    };
+
+    try {
+      const created = await createEnvironment(envData);
+      setEnvironments(prev => [...prev, created]);
+      setSelectedEnvId(created.id);
+      setImportStatus(`Custom environment '${created.name}' created and ready to navigate!`);
+    } catch (e: any) {
+      setImportStatus(`Error: ${e.message}`);
+    }
+  };
+
   useEffect(() => {
     getEnvironments().then((envs) => {
       setEnvironments(envs);
@@ -126,6 +196,103 @@ export default function EnvironmentsPage() {
                 </button>
               ))}
             </div>
+
+            {/* Interactive Room & Corridor Studio */}
+            <LiquidCard variant="elevated" className="p-5 space-y-4 border-white/20">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#63E6D1] font-semibold block flex items-center gap-1.5">
+                <Plus className="w-3.5 h-3.5" />
+                <span>Custom Room & Navigation Studio</span>
+              </span>
+              <p className="text-xs text-zinc-400 font-light">
+                Add multiple custom rooms, coordinates, and landmarks into your library:
+              </p>
+
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  placeholder="Floorplan Name (e.g. Luxury Penthouse)"
+                  value={studioName}
+                  onChange={(e) => setStudioName(e.target.value)}
+                  className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-white/30"
+                />
+
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    placeholder="Room Name"
+                    value={newRoomName}
+                    onChange={(e) => setNewRoomName(e.target.value)}
+                    className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-white/30"
+                  />
+                  <div className="flex gap-1.5">
+                    <input
+                      type="number"
+                      placeholder="X"
+                      value={newRoomX}
+                      onChange={(e) => setNewRoomX(e.target.value)}
+                      className="w-1/2 bg-black/60 border border-white/10 rounded-xl px-2 py-2 text-xs text-white font-mono"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Y"
+                      value={newRoomY}
+                      onChange={(e) => setNewRoomY(e.target.value)}
+                      className="w-1/2 bg-black/60 border border-white/10 rounded-xl px-2 py-2 text-xs text-white font-mono"
+                    />
+                  </div>
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="Landmarks (e.g. refrigerator, sofa, table)"
+                  value={newRoomLandmarks}
+                  onChange={(e) => setNewRoomLandmarks(e.target.value)}
+                  className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-white/30"
+                />
+
+                <button
+                  type="button"
+                  onClick={handleAddStudioRoom}
+                  className="w-full py-2 rounded-xl liquid-glass-interactive text-xs text-white font-medium hover:bg-white/10 transition-all flex items-center justify-center gap-1.5"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>Add Room ({studioRooms.length} in plan)</span>
+                </button>
+              </div>
+
+              {studioRooms.length > 0 && (
+                <div className="space-y-1 max-h-28 overflow-y-auto pr-1">
+                  {studioRooms.map((r, i) => (
+                    <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-white/5 text-[11px]">
+                      <div>
+                        <span className="font-semibold text-white">{r.room_type}</span>
+                        <span className="text-zinc-500 font-mono ml-2">[{r.position[0]}, {r.position[1]}]</span>
+                        <span className="text-zinc-400 block text-[10px] truncate max-w-[180px]">{r.landmarks?.join(", ")}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveStudioRoom(i)}
+                        className="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5"
+                        title="Remove room"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {studioRooms.length >= 2 && (
+                <button
+                  type="button"
+                  onClick={handleSaveAndApplyStudio}
+                  className="w-full py-2.5 rounded-xl bg-[#63E6D1] text-black text-xs font-bold hover:bg-[#52d2bd] transition-all flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(99,230,209,0.3)]"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Build & Save Custom Environment</span>
+                </button>
+              )}
+            </LiquidCard>
 
             {/* Import Custom Graph JSON Section */}
             <LiquidCard variant="subtle" className="p-5 space-y-3">

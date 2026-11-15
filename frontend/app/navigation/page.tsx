@@ -420,7 +420,7 @@ export default function NavigationStudioPage() {
                 {[
                   { code: "en", label: "English" },
                   { code: "hi", label: "हिन्दी" },
-                  { code: "es", label: "Español" },
+                  { code: "te", label: "తెలుగు" },
                 ].map((l) => (
                   <button
                     key={l.code}
@@ -438,6 +438,51 @@ export default function NavigationStudioPage() {
               </div>
             </div>
 
+            {/* Multilingual Parallel Instruction Display (Matching Reference Screenshot) */}
+            <div className="rounded-xl border border-white/[0.08] bg-[#0D1117] overflow-hidden my-3 shadow-lg">
+              <div
+                onClick={() => setSelectedLang("en")}
+                className={`flex items-center gap-3 px-4 py-3 border-b border-white/[0.07] cursor-pointer transition-colors ${
+                  selectedLang === "en" ? "bg-white/[0.04]" : "hover:bg-white/[0.02]"
+                }`}
+              >
+                <span className={`font-mono text-xs font-semibold w-7 shrink-0 ${selectedLang === "en" ? "text-[#63E6D1]" : "text-zinc-500"}`}>
+                  EN
+                </span>
+                <span className="text-xs text-zinc-200 font-light flex-1">
+                  {selectedLang === "en" && instructionText ? instructionText : "Turn left at the refrigerator."}
+                </span>
+              </div>
+
+              <div
+                onClick={() => setSelectedLang("hi")}
+                className={`flex items-center gap-3 px-4 py-3 border-b border-white/[0.07] cursor-pointer transition-colors ${
+                  selectedLang === "hi" ? "bg-white/[0.04]" : "hover:bg-white/[0.02]"
+                }`}
+              >
+                <span className={`font-mono text-xs font-semibold w-7 shrink-0 ${selectedLang === "hi" ? "text-[#63E6D1]" : "text-zinc-500"}`}>
+                  HI
+                </span>
+                <span className="text-xs text-zinc-200 font-light flex-1">
+                  {selectedLang === "hi" && instructionText ? instructionText : "फ्रिज के पास बाएं मुड़ें।"}
+                </span>
+              </div>
+
+              <div
+                onClick={() => setSelectedLang("te")}
+                className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors ${
+                  selectedLang === "te" ? "bg-white/[0.04]" : "hover:bg-white/[0.02]"
+                }`}
+              >
+                <span className={`font-mono text-xs font-semibold w-7 shrink-0 ${selectedLang === "te" ? "text-[#63E6D1]" : "text-zinc-500"}`}>
+                  TE
+                </span>
+                <span className="text-xs text-zinc-200 font-light flex-1">
+                  {selectedLang === "te" && instructionText ? instructionText : "రిఫ్రిజిరేటర్ దగ్గర ఎడమవైపు తిరగండి."}
+                </span>
+              </div>
+            </div>
+
             {/* Instruction Input */}
             <div className="space-y-2">
               <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block">
@@ -448,7 +493,7 @@ export default function NavigationStudioPage() {
                 disabled={isRunning}
                 onChange={(e) => setInstructionText(e.target.value)}
                 rows={3}
-                placeholder="Type instruction in English, Hindi, or Spanish..."
+                placeholder="Type instruction in English, Hindi, or Telugu..."
                 className="w-full bg-white/[0.03] border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-white/30 transition-all resize-none font-light leading-relaxed"
               />
             </div>
